@@ -22,18 +22,23 @@
 
 package com.ibm.jaio;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 
 public abstract class AsynchronousIOReadWrite<T> extends AsynchronousIOOperation<T> {
 
-	public void set(File file, ByteBuffer buf, long fileOffset, T attachment) {
+	public void set(File file, ByteBuffer buf, long fileOffset, T attachment) throws IOException {
 		setFile(file);
 		setAttachment(attachment);
 		// cf. io_prep_read/write
 		iocb.setaio_reqprio((short)0);
 		Nativeio_iocb_common common = iocb.getu_c();
-		common.setbuf(MemoryUtils.getAddress(buf) + buf.position());
+		long bufP = MemoryUtils.getAddress(buf) + buf.position();
+		if (bufP % MemoryUtils.pageSize != 0) {
+		    throw new IOException("Buffer does not align with pageSize.");
+		}
+		common.setbuf(bufP);
 		common.setnbytes(buf.remaining());
 		common.setoffset(fileOffset);
 	}

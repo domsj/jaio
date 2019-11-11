@@ -22,15 +22,57 @@
 
 package com.ibm.jaio;
 
+import sun.misc.Unsafe;
+import sun.misc.VM;
 import sun.nio.ch.DirectBuffer;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
-class MemoryUtils {
+public class MemoryUtils {
 	public MemoryUtils() {
 	}
 
 	public static long getAddress(ByteBuffer buffer) {
 		return ((DirectBuffer)buffer).address();
+	}
+
+	private static Unsafe getUnsafe() throws NoSuchFieldException, IllegalAccessException {
+		Field f = Unsafe.class.getDeclaredField("theUnsafe");
+		f.setAccessible(true);
+		return (Unsafe) f.get(null);
+	}
+
+	private static final Unsafe unsafe;
+	static
+	{
+		try
+		{
+			unsafe = getUnsafe();
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static int pageSize = unsafe.pageSize();
+
+	public static ByteBuffer allocateDirectAlignedBuffer(int pages) {
+		int size = pages * pageSize;
+		if (VM.isDirectMemoryPageAligned()) {
+			return ByteBuffer.allocateDirect(size);
+		}
+
+		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(size + pageSize - 1);
+		long address = getAddress(byteBuffer);
+		int offset = (int)(address % pageSize);
+		if (offset == 0) {
+			return byteBuffer;
+		}
+
+		byteBuffer.position(pageSize - offset);
+		byteBuffer.limit(pageSize - offset + size);
+		return byteBuffer.slice();
 	}
 }
