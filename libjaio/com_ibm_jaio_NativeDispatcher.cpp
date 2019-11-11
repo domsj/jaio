@@ -199,3 +199,52 @@ JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_o_1sync
 }
 
 
+/*
+ * Class:     com_ibm_jaio_NativeDispatcher
+ * Method:    e_again
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_e_1again
+  (JNIEnv *, jclass) {
+    return EAGAIN;
+}
+
+/*
+ * Class:     com_ibm_jaio_NativeDispatcher
+ * Method:    e_badf
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_e_1badf
+  (JNIEnv *, jclass) {
+    return EBADF;
+}
+
+/*
+ * Class:     com_ibm_jaio_NativeDispatcher
+ * Method:    e_fault
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_e_1fault
+  (JNIEnv *, jclass) {
+    return EFAULT;
+}
+
+/*
+ * Class:     com_ibm_jaio_NativeDispatcher
+ * Method:    e_inval
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_e_1inval
+  (JNIEnv *, jclass) {
+    return EINVAL;
+}
+
+/*
+ * Class:     com_ibm_jaio_NativeDispatcher
+ * Method:    e_nosys
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_com_ibm_jaio_NativeDispatcher_e_1nosys
+  (JNIEnv *, jclass) {
+    return ENOSYS;
+}

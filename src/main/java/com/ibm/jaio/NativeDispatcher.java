@@ -24,7 +24,7 @@ package com.ibm.jaio;
 
 import java.io.IOException;
 
-class NativeDispatcher {
+public class NativeDispatcher {
 
 	static {
 		System.loadLibrary("jaio");
@@ -53,4 +53,11 @@ class NativeDispatcher {
 	static native int o_dsync();
 
 	static native int o_sync();
+
+	// error codes
+    public static native int e_again();
+    public static native int e_badf();
+    public static native int e_fault();
+    public static native int e_inval();
+    public static native int e_nosys();
 }
