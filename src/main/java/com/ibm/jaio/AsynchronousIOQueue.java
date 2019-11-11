@@ -38,11 +38,11 @@ public class AsynchronousIOQueue {
 		this.inFlight = new ConcurrentHashMap<Long, Object>(nrEvents);
 	}
 
-	public void submit(AsynchronousIOOperationArray ops) throws IOException {
-		submit(ops, ops.length);
+	public int submit(AsynchronousIOOperationArray ops) throws IOException {
+		return submit(ops, ops.length);
 	}
 
-	public void submit(AsynchronousIOOperationArray ops, int length) throws IOException {
+	public int submit(AsynchronousIOOperationArray ops, int length) throws IOException {
 		for (int i = 0; i < length; i++) {
 			AsynchronousIOOperation op = ops.get(i);
 			Object attachment = op.getAttachment();
@@ -51,7 +51,7 @@ public class AsynchronousIOQueue {
 				throw new IOException("already in flight: " + attachment.hashCode());
 			}
 		}
-		NativeDispatcher.io_submit(context, length, ops.rawDataAddress);
+		return NativeDispatcher.io_submit(context, length, ops.rawDataAddress);
 	}
 
 	void cancel(AsynchronousIOOperation op) {
