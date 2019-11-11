@@ -4,12 +4,20 @@ A Java API for libaio.
 
 ## Building jaio
 
-- Build libjaio:
+- Install dependencies (ubunt 18.04):
+```bash
+sudo apt-get install libaio1 libaio-dev
+```
+
+- Build and install libjaio:
 ```bash
 cd libjaio
 mkdir Release
 cd Release
 cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+make
+sudo make install
+ln -s /usr/local/lib/libjaio.so /usr/lib/
 ```
 - Build jaio:
 ```bash
